@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chalk": "^4.1.2",
+    "nodemon": "^2.0.14"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "http-proxy-middleware": "^2.0.1",
+    "log4js": "^6.3.0"
+  }
+}
