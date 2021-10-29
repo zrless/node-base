@@ -10,12 +10,12 @@ function getStaticUrl(url, response) {
   const type = mime.getType(ext);
   if (fs.existsSync(filePath)) {
     if (ext) {
-      fs.readFile(filePath, (err, res) => {
+      fs.readFile(filePath, (err, data) => {
         if (err) throw err;
         response.writeHead(200, {
           'Content-Type': type,
         });
-        response.write(res.toString());
+        response.write(data);
         response.end();
       });
     } else {
