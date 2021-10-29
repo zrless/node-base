@@ -8,7 +8,7 @@ const querystring = require('querystring');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cheerio = require('cheerio');
 const EventEmitter = require('events');
-
+const mime = require('mime');
 const logger = require('./log');
 logger.level = 'debug';
 /**
@@ -29,24 +29,28 @@ logger.level = 'debug';
   console.log('process:', process.argv);
  */
 
-class MyEventsEmitter extends EventEmitter {
-  state = {
-    name: 'Rico',
-    age: 27,
-  };
-  sayName() {
-    console.log("My Name is ",this.state.name)
+/**
+ * events
+  class MyEventsEmitter extends EventEmitter {
+    state = {
+      name: 'Rico',
+      age: 27,
+    };
+    sayName() {
+      console.log("My Name is ",this.state.name)
+    }
   }
-}
-const myEventsEmitter = new MyEventsEmitter();
-myEventsEmitter.on('doSometing', (value) => {
-  console.log(value);
-});
-myEventsEmitter.emit('doSometing', 'Play game!');
-myEventsEmitter.sayName()
+  const myEventsEmitter = new MyEventsEmitter();
+  myEventsEmitter.on('doSometing', (value) => {
+    console.log(value);
+  });
+  myEventsEmitter.emit('doSometing', 'Play game!');
+  myEventsEmitter.sayName()
+ */
 
 const httpServer = http.createServer((request, response) => {
   const { pathname } = url.parse(request.url);
+  console.log(pathname);
   /**
    * 直接输出html
     response.writeHead(200, {
@@ -55,6 +59,18 @@ const httpServer = http.createServer((request, response) => {
     response.write(`<div style="color: red;">hello world!</div>`);
     response.end();
    */
+
+  const file = fs.readFileSync(`.${request.url}`);
+  if (file) {
+    const type = mime.getType(request.url);
+    console.log(type);
+    response.writeHead(200, {
+      'content-type': type,
+    });
+    response.end(file);
+    return;
+  }
+
   if (/^\/xmapi/.test(pathname)) {
     const xmapiProxy = createProxyMiddleware('/xmapi', {
       target: 'https://www.xiaomiyoupin.com',
